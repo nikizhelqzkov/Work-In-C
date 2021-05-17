@@ -34,5 +34,6 @@ int main(int argc, char **argv)
 
     write(2, str, strlen(str));
     close(fd);
+    free(str);
     return 0;
 }

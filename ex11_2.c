@@ -27,5 +27,7 @@ int main()
         printf("index: %d\n",index);
     }
     printf("%d bytes and str: %s\n", sz, el);
+    free(buf);
+    free(el);
     return 0;
 }

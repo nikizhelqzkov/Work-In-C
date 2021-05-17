@@ -27,5 +27,6 @@ int main()
     len = write(fd, el, strlen(el));
     printf("We write %d bytes\n", len);
     close(fd);
+    free(el);
     return 0;
 }

@@ -41,5 +41,7 @@ int main(int argc, char **argv)
     printf("%s\n", newbuf, pos);
     fd = open(argv[2], O_WRONLY | O_APPEND);
     int len = write(fd, newbuf, strlen(newbuf));
+    free(buf);
+    free(newbuf);
     return 0;
 }

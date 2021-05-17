@@ -34,8 +34,9 @@ int main(int argc, char **argv)
             --i;
         }
     }
-    
+
     printf(" %d %d %d %s\n", line, words, symbols, argv[1]);
+    free(buf);
 
     return 0;
 }
