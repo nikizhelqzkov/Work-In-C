@@ -8,7 +8,6 @@
 int main()
 {
     int pid;
-    int workPid;
     pid = fork();
     if (pid == -1)
     {
@@ -23,7 +22,6 @@ int main()
     {
         sleep(3);
         printf("Child pid: %d\n", getpid());
-        workPid = 0;
     }
     printf("WOrking... from %d\n", getpid());
 

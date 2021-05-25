@@ -20,16 +20,16 @@ int main()
     }
     else
     {
-        int workPid = 0;
-        while (workPid <= 500000000)
+        int waiter = 0;
+        while (waiter <= 500000000)
         {
-            workPid = workPid + 1;
+            waiter = waiter + 1;
         }
+        printf("\n");
 
         printf("Child pid: %d\n", getpid());
     }
     printf("WOrking... from %d\n", getpid());
-    exit(1);
 
     return 0;
 }
