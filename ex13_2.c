@@ -12,7 +12,7 @@ int main()
     if (pid == -1)
     {
         perror("Bad fork");
-        exit(0);
+        exit(1);
     }
     else if (pid > 0)
     {
