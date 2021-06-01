@@ -24,7 +24,7 @@ int main(int argc, char **argv)
         else
         {
             wait(&status2);
-            char *args[argc];
+            char **args = (char **)malloc((argc) * sizeof(char));
             for (int i = 2; i < argc; ++i)
             {
                 args[i - 2] = argv[i];
