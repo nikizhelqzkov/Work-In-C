@@ -1,0 +1,29 @@
+#include <unistd.h>
+#include <stdlib.h>
+#include <fcntl.h>
+
+main()
+{
+    int fdw, fd2, nb1, nb2;
+    char buf[25], buff[10];
+
+    fdw = open("fileBB", O_WRONLY | O_CREAT | O_TRUNC, 0777); //suzdavame fileBB za pisane
+    fd2 = open("fileBB", O_RDWR);//Za chetene i pisane vurhu nego
+
+    write(fdw, "Today is sunny day", 18); //Today is sunny day in Filebb
+                                                  
+    lseek(fd2, 9, SEEK_SET);                      //|
+    nb1 = read(fd2, buf, 6);                //buf = sunny_
+    write(1, buf, nb1);                         //sunny_
+
+    nb1 = read(fd2, buff, 3);                   //buff=day
+
+    lseek(fdw, -9, SEEK_END);                    //filebb: Today is very good
+    write(fdw, "very good", 9);                     //sunny morning
+    write(1, "morning!", 8);
+
+    write(fdw, " ", 1);                             //filedb:Today is very good_ 
+                                                    //filedb:Today is very good day
+    write(fdw, buff, nb1);
+    return 0;
+}

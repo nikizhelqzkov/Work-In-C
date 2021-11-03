@@ -1,0 +1,27 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <fcntl.h>
+#define CMD "wc -l $PWD"
+main(int argc, char *argv[])
+{
+  int fd, i = 2, nb1, status;
+  char buf[5];
+  if (fork() == 0)//dete
+  {
+    ++i; // i = 3
+    exit(0);//spira deteto s 0
+  }
+  else //roditel
+  {
+    if (execlp(CMD, CMD, 0) == -1) //ako ne se izpulni
+    {
+      --i; // i = 1
+      wait(&status); //status = 0
+      printf("Stoinostta na i= %d\n", i);
+    }
+    else
+      printf("Stoinostta na i= %d\n", i);
+  }
+}
+//Stoinostta na i= 1
