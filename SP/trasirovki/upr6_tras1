@@ -1,0 +1,40 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <fcntl.h>
+main(int argc, char *argv[])
+{
+      int fd, j, nb1;
+      char buf[5];
+      if (fork())//roditel
+      {
+            wait();//chaka dete
+            execlp("cat", "cat", "fileA.txt", 0); //izpulnqva
+      }
+      else
+      {
+            j = dup(1); // pazi j kato izhod na potok
+            fd = open(argv[1], O_RDWR); //v fileA.txt shre chete i pishe deteto
+            nb1 = read(0, buf, 5); //buf = abcde
+            write(j, buf, nb1); //abcde
+            nb1 = read(fd, buf, 5);//buf = 01234
+            write(1, buf, nb1);//01234
+            write(fd, "\n", 1);//pishem \n na mqstoto na 5
+            write(fd, buf, nb1); //pishem 01234 na mqstoto na 6789 i dobavqme nov simvol
+            write(j, buf, 3);
+            close(fd);
+            close(j);
+            exit(0);
+      }
+}
+
+// fileA.txt->0123456789
+// fileA.txt->01234\n
+//            6789
+// fileA.txt->01234\n
+//            01234
+/*
+Izhod:
+abcde0123401201234
+01234
+*/

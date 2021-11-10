@@ -1,0 +1,49 @@
+#include <stdio.h>
+#include <unistd.h>
+#include <fcntl.h>
+#define CMD "who"
+main()
+{
+  int fd, i = 2, k = 0, status; 
+  if (fork())//roditel
+  {
+    wait(&status);
+    i--; // i = 1
+    k--; // k = -1
+    write(1, "exam1\n", 6);
+    printf("I=%d K= %d \n", i, k);
+  }
+  else//dete
+  {
+    for (k = 1; k <= 3; k++) //1 2 3
+    {
+      write(1, "exam2\n", 6);
+      i = k + i; // i = 2+1 = 3
+      printf("I=%d K=%d\n", i, k);
+      if ((execlp(CMD, CMD, 0)) == -1)
+        write(1, "exam3\n", 6);
+      printf("I=%d K=%d\n", i, k);
+    }
+  }
+  write(1, "exam4\n", 6);
+  if ((execlp("ls", "ls", 0)) == -1)
+    printf("I=%d K=%d\n", i, k);
+  else
+  {
+    write(1, "exam5\n", 6);
+  }
+}
+
+/*
+Terminal:
+exam2
+I=3 K=1
+nikizhelqzkov :0           2021-11-11 00:02 (:0)
+exam1
+I=1 K=-1 
+exam4
+a.out    ex1_4.c  ex2_2.c    ex2_7.c    ex3_2.c  ex4_2-4.c  ex5_3.c    ex5_6-2.c  ex6_1.c  ex6_5-1.c  ex6_7.c  ex6New       servername  upr6_tras1
+ex1_1.c  ex1_5.c  ex2_3-4.c  ex2_8.c    ex3_3.c  ex4_5-6.c  ex5_4.c    ex5_6-3.c  ex6_2.c  ex6_5-2.c  ex6_8.c  ex6Testings  test        upr6_tras2
+ex1_2.c  ex1_6.c  ex2_5.c    ex3_1.2.c  ex4_0.c  ex4_7.c    ex5_5.c    ex5_7.c    ex6_3.c  ex6_6      ex6_9.c  fileA.txt    test.c      upr6_tras2.c
+ex1_3.c  ex2_1.c  ex2_6.c    ex3_1.c    ex4_1.c  ex5_1-2.c  ex5_6-1.c  ex5_8.c    ex6_4.c  ex6_6.c    ex6file  fileB        trasirovki  upr6_tras3.c
+*/
