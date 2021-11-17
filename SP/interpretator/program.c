@@ -83,10 +83,6 @@ int main()
     char *text = (char *)malloc(sizeof(char) * 1000);
     char *buf = (char *)malloc(sizeof(char) * 1);
     char **args = (char **)malloc(100 * sizeof(char *));
-    // for (int i = 0; i < 100; i++) //na vsqko nuzhno samo da go pravq
-    // {
-    //     args[i] = (char *)malloc(100 * sizeof(char));
-    // }
     write(1, "Hello to the command prompt\nWrite your commands\n", 48);
     interStart(text, buf, args);
     return 0;
