@@ -3,10 +3,11 @@
 #include <unistd.h>
 int main()
 {
+    int fd =open("test.c",O_RDONLY);
     char c[6];
     int k = dup(0);
-    read(k, c, 4);
-    write(1, c, 1);
-    read(0, c, 5);
-    write(1, c, 5);
+    int size = read(fd,c,7);
+    write(1,"\n",1);
+    write(1,c,size);
+    
 }
