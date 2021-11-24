@@ -8,10 +8,6 @@
 
 int main()
 {
-    // char *bufP = (char *)malloc(sizeof(char) * 10);
-    // char *bufPN = (char *)malloc(sizeof(char) * 10);
-    // char *bufC = (char *)malloc(sizeof(char) * 10);
-    // char *bufCN = (char *)malloc(sizeof(char) * 10);
     int fd = open("raceFile.txt", O_RDWR | O_CREAT | O_TRUNC, 0666);
     if (fd == -1)
     {
@@ -26,14 +22,10 @@ int main()
     {
         if (pid > 0)
         {
-            // lseek(fd, 0, 0);
             lseek(fd, 0, 0);
             read(fd, &raceNum, sizeof(int));
             lseek(fd, 0, 0);
-            // raceNum = atoi(bufP);
             raceNum += 1;
-            // itoa(raceNum, bufPN, 10);
-            // sprintf(bufPN, "%d", raceNum);
             lseek(fd, 0, 0);
             write(fd, &raceNum, sizeof(int));
             lseek(fd, 0, 0);
@@ -41,14 +33,10 @@ int main()
         }
         else if (pid == 0)
         {
-            // lseek(fd, 0, 0);
             lseek(fd, 0, 0);
             read(fd, &raceNum, sizeof(int));
             lseek(fd, 0, 0);
-            // raceNum = atoi(bufC);
             raceNum += 2;
-
-            // sprintf(bufCN, "%d", raceNum);
             lseek(fd, 0, 0);
             write(fd, &raceNum, sizeof(int));
             lseek(fd, 0, 0);
