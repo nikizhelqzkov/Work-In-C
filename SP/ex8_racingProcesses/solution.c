@@ -8,12 +8,8 @@
 
 int main()
 {
-    // int number = 25;
     char *bufP = (char *)malloc(sizeof(char) * 10);
     char *bufC = (char *)malloc(sizeof(char) * 10);
-    // sprintf(number_str, "%d", number);
-    // int newNum = atoi(number_str);
-    // printf("%d",newNum);
     int fd = open("raceFile.txt", O_RDWR | O_CREAT | O_TRUNC, 0666);
     if (fd == -1)
     {
@@ -26,10 +22,9 @@ int main()
     pid_t pid = fork();
     while (raceNum <= 1000)
     {
-        // int size = lseek(fd, 0, SEEK_END);
-        lseek(fd, 0, 0);
         if (pid > 0)
         {
+            lseek(fd, 0, 0);
             read(fd, bufP, 10);
             lseek(fd, 0, 0);
             raceNum = atoi(bufP);
@@ -42,6 +37,7 @@ int main()
         }
         else if (pid == 0)
         {
+            lseek(fd, 0, 0);
             read(fd, bufC, 10);
             lseek(fd, 0, 0);
             raceNum = atoi(bufC);
