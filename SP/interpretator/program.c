@@ -30,12 +30,16 @@ void readText(int isEndOfLine, char *buf, char *text, char **args)
     int curArg = 0;
     while (isEndOfLine == 0)
     {
+        if (strcmp(text, "logout") == 0 || strcmp(text, "bye") == 0 || strcmp(text, "quit") == 0)
+        {
+            exit(0);
+        }
         read(0, buf, 1);
         if (buf[0] == '\n')
         {
             if (strcmp(text, "logout") == 0 || strcmp(text, "bye") == 0 || strcmp(text, "quit") == 0)
             {
-                break;
+                exit(0);
             }
             buf[0] = '\0';
             text[lastIndex] = buf[0];
