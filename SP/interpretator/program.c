@@ -5,6 +5,51 @@
 #include <string.h>
 #include <sys/types.h>
 #include <wait.h>
+int pipeExecuting(int size, char **argv, int pipePos)
+{
+    char **bufF = (char **)malloc((size) * sizeof(char));
+    for (int i = 0; i < pipePos; i++)
+    {
+        bufF[i] = argv[i];
+    }
+    char **bufS = (char **)malloc((size) * sizeof(char));
+    for (int i = pipePos + 1; i < size; i++)
+    {
+        bufS[i - pipePos - 1] = argv[i];
+    }
+
+    int fd[2];
+    pipe(fd);
+    pid_t pid = fork();
+    if (pid > 0)
+    {
+        close(1);
+        dup(fd[1]);
+        close(fd[1]);
+        close(fd[0]);
+        execvp(argv[0], bufF); // to be fixed
+    }
+    else if (pid == 0)
+    {
+        close(0);
+        dup(fd[0]);
+        close(fd[1]);
+        close(fd[0]);
+        execvp(argv[pipePos + 1], bufS);
+    }
+}
+
+int isHasPipeSymbol(char **args, int size)
+{
+    for (int i = 0; i < size; i++)
+    {
+        if (strcmp(args[i], "|") == 0)
+        {
+            return i;
+        }
+    }
+    return -1;
+}
 void executeLine(int curArg, char **args)
 {
     int pid = fork();
@@ -15,11 +60,21 @@ void executeLine(int curArg, char **args)
     }
     else if (pid == 0)
     {
-        args[curArg] = (char *)malloc(100 * sizeof(char));
-        args[curArg] = NULL;
-        if (execvp(args[0], args) == -1)
+        // while it has "|" or i<n
+        int pipePos = isHasPipeSymbol(args, curArg);
+        if (pipePos > 0)
         {
-            write(1, "Error command\n", 15);
+            exit(pipeExecuting(curArg, args, pipePos));
+        }
+        else
+        {
+            args[curArg] = (char *)malloc(100 * sizeof(char));
+            args[curArg] = NULL;
+            if (execvp(args[0], args) == -1)
+            {
+                write(1, "Error command\n", 15);
+                exit(0);
+            }
         }
     }
 }
