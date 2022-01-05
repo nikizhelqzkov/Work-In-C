@@ -38,12 +38,87 @@ int pipeExecuting(int size, char **argv, int pipePos)
         execvp(argv[pipePos + 1], bufS);
     }
 }
-
+int changeWrite(int size, char **argv, int changeWritePos)
+{
+    char **bufF = (char **)malloc((size) * sizeof(char));
+    for (int i = 0; i < changeWritePos; i++)
+    {
+        bufF[i] = argv[i];
+    }
+    bufF[changeWritePos] = NULL;
+    pid_t pid = fork();
+    if (pid == 0)
+    {
+        int fd = open(argv[changeWritePos + 1], O_WRONLY | O_APPEND | O_TRUNC, 0644);
+        if (fd == -1)
+        {
+            printf("Error with opening file\n");
+        }
+        close(1);
+        dup(fd);
+        execvp(argv[1], bufF);
+    }
+    if (pid > 0)
+    {
+        int status;
+        wait(&status);
+        exit(0);
+    }
+}
+int changeRead(int size, char **argv, int changeReadPos)
+{
+    char **bufF = (char **)malloc((size) * sizeof(char));
+    for (int i = 0; i < changeReadPos; i++)
+    {
+        bufF[i] = argv[i];
+    }
+    bufF[changeReadPos] = NULL;
+    pid_t pid = fork();
+    if (pid == 0)
+    {
+        int fd = open(argv[changeReadPos + 1], O_RDONLY);
+        if (fd == -1)
+        {
+            printf("Error with opening file\n");
+        }
+        close(1);
+        dup(fd);
+        execvp(argv[1], bufF);
+    }
+    if (pid > 0)
+    {
+        int status;
+        wait(&status);
+        exit(0);
+    }
+}
 int isHasPipeSymbol(char **args, int size)
 {
     for (int i = 0; i < size; i++)
     {
         if (strcmp(args[i], "|") == 0)
+        {
+            return i;
+        }
+    }
+    return -1;
+}
+int isHasChangeExit(char **args, int size)
+{
+    for (int i = 0; i < size; i++)
+    {
+        if (strcmp(args[i], ">") == 0)
+        {
+            return i;
+        }
+    }
+    return -1;
+}
+int isHasChangeRead(char **args, int size)
+{
+    for (int i = 0; i < size; i++)
+    {
+        if (strcmp(args[i], "<") == 0)
         {
             return i;
         }
@@ -62,9 +137,20 @@ void executeLine(int curArg, char **args)
     {
         // while it has "|" or i<n
         int pipePos = isHasPipeSymbol(args, curArg);
+        int changeWritePos = isHasChangeWrite(args, curArg);
+        int changeReadPos = isHasChangeRead(args, curArg);
+        int pipePos = isHasPipeSymbol(args, curArg);
         if (pipePos > 0)
         {
             exit(pipeExecuting(curArg, args, pipePos));
+        }
+        else if (changeWritePos > 0)
+        {
+            exit(changeWrite(curArg, args, changeWritePos));
+        }
+        else if (changeReadPos > 0)
+        {
+            exit(changeRead(curArg, args, changeReadPos));
         }
         else
         {
