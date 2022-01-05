@@ -1,0 +1,33 @@
+#include <stdio.h>
+#include <fcntl.h>
+
+int main(int args, char *argv[])
+{
+    int pid, var = 1, status;
+
+    if ((pid = fork()) == 0)//children
+    {
+        var += 2;               //var=3
+        printf("\n Var = %d", var);   //Var = 3
+    }
+    else
+    {
+        wait(&status);
+        var++;              //var = 1-> 2
+        printf("\n Var = %d", var); //Var = 2
+        exit(0);
+    }
+    --var; //Only Children : var = 2
+    printf("\n Var = % d", var);// Var = 2
+}
+
+//Result:
+/*
+
+Var = 3
+Var = 2
+Var = 2
+
+
+
+*/

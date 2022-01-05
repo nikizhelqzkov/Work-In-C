@@ -1,0 +1,30 @@
+#include <stdio.h>
+#include <fcntl.h>
+
+#define COM "ps"
+int main(int args, char *argv[])
+{
+    int i = 2, status;
+    if (fork())
+    {
+        wait(&status);
+        --i; // i = 1
+        printf(" Stoinostta na i = % d;", i);//Stoinostta na i = 1
+    }
+    else
+    {
+        i++; // i=2 -> 3
+        if (execlp(COM, COM, 0) == -1)//Ps status
+        {
+            i = i + 2;
+            printf(" Stoinostta na i = % d;", i);
+        }
+    }
+    printf("Stoinostta na i = % d;", --i);//Stoinostta na i =0
+}
+
+//Result:
+/*
+Ps :...
+ Stoinostta na i = 1; Stoinostta na i = 0
+*/
