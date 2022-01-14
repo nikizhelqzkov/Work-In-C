@@ -30,16 +30,14 @@ int main()
 
     lseek(fdio, -18, SEEK_END);
     write(fdio, "tra", 3);
-    //Let’s go ||travel the world!
+    //Let’s gotravele the world!
     write(fdio, "vel", 3);
-    nb2 = read(fdio, buf, 5);//_the_ 
-    write(1, buf, nb2);//_the_ 
+    nb2 = read(fdio, buf, 5);//e the
+    write(1, buf, nb2);//e_the 
     write(1, "time", 4);//time
 
     lseek(fdi, -2, SEEK_END);
-    //Let’s go ||travel the world!
+ 
     nb2 = read(fdi, buf, 2);
     write(1, buf, nb2);//d!
 }
-//output:Let’s_change_the_timed!
-//file:Let’s go ||travel the world!
